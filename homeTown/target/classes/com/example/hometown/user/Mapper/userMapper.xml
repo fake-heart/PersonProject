@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hometown.user.Mapper.userMapper">
+<!--根据id更新用户信息-->
+    <update id="updateUserInfo">
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--    添加文化收藏-->
+    <insert id="addCollect">
+        insert into culture_collection(name,user_id,culture_id,create_time,update_time)
+        values(#{name},#{userId},#{cultureId},#{createTime},#{updateTime})
+    </insert>
+<!--    添加美食收藏-->
+    <insert id="addFoodCollect">
+        insert into cuisine_collection(name,user_id,cuisine_id,create_time,update_time)
+        values(#{name},#{userId},#{cuisineId},#{createTime},#{updateTime})
+    </insert>
+<!--        添加景点收藏-->
+    <insert id="addScenicCollect">
+        insert into scenic_collection(name,user_id,scenic_id,create_time,update_time)
+        values(#{name},#{userId},#{scenicId},#{createTime},#{updateTime})
+    </insert>
+    <!--    展示文化收藏-->
+    <select id="showCultureCollection" resultType="com.example.hometown.user.userEntity.culture_collection">
+select  cultural_feature.* from culture_collection left join cultural_feature on culture_collection.culture_id = cultural_feature.id
+where culture_collection.user_id= #{userId}
+
+    </select>
+<!--    展示美食收藏-->
+    <select id="showFoodCollection" resultType="com.example.hometown.user.userEntity.food_collection">
+        select cuisine.* from cuisine_collection left join cuisine on cuisine_collection.cuisine_id = cuisine.id
+        where cuisine_collection.user_id= #{userId}
+    </select>
+<!--    展示景点收藏-->
+    <select id="showScenicCollection" resultType="com.example.hometown.user.userEntity.scenic_collection">
+        select scenic_spot.* from scenic_collection left join scenic_spot on scenic_collection.scenic_id = scenic_spot.id
+        where scenic_collection.user_id=#{userId}
+    </select>
+</mapper>

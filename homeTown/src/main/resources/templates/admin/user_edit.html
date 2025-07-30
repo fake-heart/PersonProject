@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>编辑用户</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 图标 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0"><i class="fa fa-users mr-2"></i> 编辑用户信息</h3>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- 表单开始 -->
+                    <form th:action="@{/admin/user_update}" method="post">
+
+                        <!-- 隐藏字段：ID -->
+                        <input type="hidden" name="id" th:value="${newUser.id}" />
+
+                        <!-- 用户名 -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">用户名 <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   id="username"
+                                   name="username"
+                                   class="form-control form-control-lg"
+                                   placeholder="请输入用户名"
+                                   th:value="${newUser.username}"
+                                   required />
+                        </div>
+
+                        <!-- 电话 -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">联系电话</label>
+                            <input type="text"
+                                   id="phone"
+                                   name="phone"
+                                   class="form-control"
+                                   placeholder="请输入联系电话"
+                                   th:value="${newUser.phone}" />
+                        </div>
+
+                        <!-- 用户状态 -->
+                        <div class="mb-3">
+                            <label for="userStatus" class="form-label">用户状态 <span class="text-danger">*</span></label>
+                            <select id="userStatus" name="userStatus" class="form-select" required>
+                                <option value="">请选择状态</option>
+                                <option value="1" th:selected="${newUser.userStatus == 1}">正常</option>
+                                <option value="2" th:selected="${newUser.userStatus == 2}">封禁</option>
+                            </select>
+                        </div>
+
+                        <!-- 创建时间 -->
+                        <div class="mb-3">
+                            <label for="createTime" class="form-label">创建时间</label>
+                            <input type="text"
+                                   id="createTime"
+                                   name="createTime"
+                                   class="form-control"
+                                   th:value="${newUser.createTime}"
+                                   readonly />
+                        </div>
+
+                        <!-- 更新时间 -->
+                        <div class="mb-3">
+                            <label for="updateTime" class="form-label">更新时间 <span class="text-danger">*</span></label>
+                            <input type="date"
+                                   id="updateTime"
+                                   name="updateTime"
+                                   class="form-control"
+                                   th:value="${newUser.updateTime?.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd'))}"
+                                   required />
+                        </div>
+
+                        <!-- 按钮区域 -->
+                        <div class="d-flex justify-content-between">
+                            <a class="btn btn-outline-secondary" href="/admin/user_manage">
+                                <i class="fa fa-arrow-left"></i> 返回列表
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg px-4">
+                                <i class="fa fa-save"></i> 保存修改
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

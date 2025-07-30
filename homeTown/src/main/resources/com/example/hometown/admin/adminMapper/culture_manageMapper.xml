@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hometown.admin.adminMapper.culture_manageMapper">
+
+
+    <!-- 分页查询文化活动-->
+
+    <select id="page" resultType="com.example.hometown.admin.adminEntity.culture">
+        select cultural_feature.*, resource.file_path as image from cultural_feature left join resource on resource.id = cultural_feature.main_image_id
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="beginTime != null">
+                and create_time >= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and create_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+<!--    根据id查询文化活动-->
+    <select id="getById" resultType="com.example.hometown.admin.adminEntity.culture">
+        select cultural_feature.*, resource.file_path as image from cultural_feature left join resource on resource.id = cultural_feature.main_image_id
+        where cultural_feature.id = #{id}
+    </select>
+<!--    更新文化活动-->
+    <update id="update">
+update cultural_feature
+<set>
+
+    <if test="history !=null and history !=''">
+            history = #{history},
+    </if>
+
+
+</set>
+where cultural_feature.id = #{id}
+
+    </update>
+    <insert id="add">
+        insert into cultural_feature(name,description,create_by, history,update_time,create_time) values(#{name},#{description},#{createBy},#{history},#{updateTime},#{createTime})
+    </insert>
+
+</mapper>

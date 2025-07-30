@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心 - 我的家乡</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">我的家乡</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/user">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/scenic">景点</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/food">美食</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/culture">文化</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/user/userCenter">个人中心</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/login">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/register">注册</a>
+                </li>
+                <!-- 显示用户名 -->
+                <span class="navbar-text text-white me-3" th:if="${username != null}">
+                    欢迎你, <span th:text="${username}">用户名</span>
+                </span>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 主体内容 -->
+<main class="container py-5 mt-5" style="padding-top: 70px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    <h4>个人信息</h4>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="username" th:value="${user.username}" readonly>
+                        </div>
+<!--                        密码-->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="password" th:value="${user.password}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">手机号</label>
+                            <input type="text" class="form-control" id="phone" th:value="${user.phone}" readonly>
+                        </div>
+<!--                        用户状态-->
+                        <div class="mb-3">
+                            <label for="status" class="form-label">用户状态</label>
+                            <input type="text" class="form-control" id="status"
+                                   th:value="${user.userStatus == 1 ? '正常' : (user.userStatus == 2 ? '封禁' : '未知')}"
+                                   readonly>
+                        </div>
+                        <div class="d-grid">
+                            <a th:href="@{/user/editUser}" class="btn btn-primary">编辑资料</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>关于我们</h3>
+                <p>这是一个展示我的家乡魅力的网站，希望能让更多人了解和爱上这座城市。</p>
+            </div>
+            <div class="col-md-4">
+                <h3>联系我们</h3>
+                <p><i class="fa fa-home"></i> 创作者:陈荫</p>
+                <p><i class="fa fa-map-marker"></i> 地址：中国四川省巴中市南江县</p>
+                <p><i class="fa fa-phone"></i> 电话：123-456-7890</p>
+                <p><i class="fa fa-envelope"></i> 邮箱：1745248713@qq.com</p>
+            </div>
+            <div class="col-md-4">
+                <h3>关注我们</h3>
+                <div class="social-media">
+                    <a href="#" class="btn btn-outline-light btn-circle me-2"><i class="fa fa-weixin"></i></a>
+                    <a href="#" class="btn btn-outline-light btn-circle me-2"><i class="fa fa-weibo"></i></a>
+                    <a href="#" class="btn btn-outline-light btn-circle me-2"><i class="fa fa-instagram"></i></a>
+                    <a href="#" class="btn btn-outline-light btn-circle"><i class="fa fa-youtube-play"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <p>&copy; 2023 我的家乡网站. 保留所有权利.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

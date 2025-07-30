@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员登录平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36BFFA',
+                        dark: '#1D2939',
+                        light: '#F9FAFB',
+                        muted: '#667085'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .glass {
+                backdrop-filter: blur(16px) saturate(180%);
+                background-color: rgba(255, 255, 255, 0.75);
+                border: 1px solid rgba(209, 213, 219, 0.3);
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .input-focus {
+                @apply focus:ring-2 focus:ring-primary/50 focus:border-primary focus:outline-none transition-all duration-300;
+            }
+            .btn-hover {
+                @apply hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300;
+            }
+            .card-hover {
+                @apply hover:shadow-xl hover:-translate-y-1 transition-all duration-500;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4 font-inter">
+<!-- 装饰元素 -->
+<div class="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-bl-full"></div>
+<div class="absolute bottom-0 left-0 w-1/4 h-1/4 bg-secondary/5 rounded-tr-full"></div>
+
+<div class="container max-w-6xl mx-auto">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+        <!-- 左侧介绍 -->
+        <div class="lg:w-1/2 space-y-6 text-center lg:text-left animate-fade-in">
+            <div class="inline-block lg:block mb-6">
+                <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center shadow-lg animate-float">
+                    <i class="fa fa-shield text-white text-3xl"></i>
+                </div>
+            </div>
+
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark leading-tight">
+                欢迎使用 <span class="text-primary">家乡特色内容管理平台</span>
+            </h1>
+
+            <p class="text-muted text-lg max-w-xl mx-auto lg:mx-0">
+                安全、高效的管理平台，帮助您轻松管理家乡特色内容，传播地方文化魅力。
+            </p>
+
+            <div class="hidden lg:flex space-x-4 mt-8">
+                <div class="bg-white rounded-xl p-4 shadow-md card-hover flex-1">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fa fa-map-marker text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark">景点管理</h3>
+                    <p class="text-sm text-muted mt-1">轻松管理和更新家乡景点信息</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-4 shadow-md card-hover flex-1">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fa fa-cutlery text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark">美食文化</h3>
+                    <p class="text-sm text-muted mt-1">展示和推广家乡特色美食</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-4 shadow-md card-hover flex-1">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fa fa-users text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-dark">用户数据</h3>
+                    <p class="text-sm text-muted mt-1">实时监控和分析访问数据</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧登录表单 -->
+        <div class="lg:w-2/5 w-full animate-slide-up">
+            <div class="glass rounded-2xl shadow-xl p-8 w-full max-w-md mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-dark">管理员登录</h2>
+                    <p class="text-muted mt-1">请输入您的账号和密码</p>
+                </div>
+
+                <form class="space-y-5" id="loginForm" th:action="@{/admin/login}" method="post" th:object="${admin}">
+                    <div class="space-y-2">
+                        <label for="username" class="block text-sm font-medium text-dark">用户名</label>
+                        <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                            <input type="text" id="username" name="username" class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 input-focus" placeholder="请输入用户名" th:field="*{username}" required>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="password" class="block text-sm font-medium text-dark">密码</label>
+                        <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            <input type="password" id="password" name="password" class="w-full pl-10 pr-10 py-3 rounded-lg border border-gray-200 input-focus" placeholder="请输入密码" th:field="*{password}" required>
+                            <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 text-muted hover:text-primary transition-colors">
+                                <i class="fa fa-eye-slash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember" name="remember" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary/50">
+                            <label for="remember" class="ml-2 block text-sm text-muted">记住我</label>
+                        </div>
+                        <a href="#" class="text-sm text-primary hover:text-primary/80 transition-colors">忘记密码?</a>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg shadow-md btn-hover flex items-center justify-center space-x-2" th:href="@{/admin/admin}" >
+                        <i class="fa fa-sign-in"></i>
+                        <span> 登录系统</span>
+                    </button>
+                    <span th:text="${errorMessage}"></span>
+
+
+
+                </form>
+
+                <div class="mt-6 pt-6 border-t border-gray-100">
+                    <p class="text-center text-sm text-muted">
+                        遇到问题? <a href="#" class="text-primary hover:underline">联系技术支持</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 移动端特色卡片 -->
+            <div class="mt-6 grid grid-cols-3 gap-3 lg:hidden">
+                <div class="glass rounded-xl p-3 text-center card-hover">
+                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fa fa-map-marker text-primary"></i>
+                    </div>
+                    <p class="text-xs font-medium">景点管理</p>
+                </div>
+
+                <div class="glass rounded-xl p-3 text-center card-hover">
+                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fa fa-cutlery text-primary"></i>
+                    </div>
+                    <p class="text-xs font-medium">美食文化</p>
+                </div>
+
+                <div class="glass rounded-xl p-3 text-center card-hover">
+                    <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                        <i class="fa fa-users text-primary"></i>
+                    </div>
+                    <p class="text-xs font-medium">用户数据</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 页脚 -->
+<div class="absolute bottom-4 left-0 right-0 text-center text-xs text-muted">
+    <p>© 2023 管理系统. 保留所有权利.</p>
+</div>
+
+<script>
+    // 密码显示/隐藏切换
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // 切换图标
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+    // 表单提交处理
+    // const loginForm = document.getElementById('loginForm');
+    // loginForm.addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //
+    //     // 模拟登录过程
+    //     const submitBtn = this.querySelector('button[type="submit"]');
+    //     const originalText = submitBtn.innerHTML;
+    //
+    //     submitBtn.disabled = true;
+    //     submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 登录中...';
+    //
+    //     // 模拟API请求延迟
+    //     setTimeout(() => {
+    //         // 模拟登录成功
+    //         alert('登录成功！即将跳转到管理页面');
+    //         submitBtn.innerHTML = originalText;
+    //         submitBtn.disabled = false;
+    //         window.location.href = '/admin/admin';//  跳转到管理页面
+    //         // 实际项目中这里应该是页面跳转
+    //         // window.location.href = '/dashboard';
+    //     }, 1500);
+    // });
+</script>
+</body>
+</html>

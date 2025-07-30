@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家乡特色系统 - 注册</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>        tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#1A56DB', // 深蓝色 - 信任与专业
+                    secondary: '#E02020', // 红色 - 传统文化元素
+                    accent: '#F7BA1E', // 金色 - 传统装饰元素
+                    neutral: '#361f37', // 深灰 - 文本
+                    'neutral-light': 'rgba(43,46,223,0.94)', // 浅灰 - 背景
+                },
+                fontFamily: {
+                    inter: ['Inter', 'sans-serif'],
+                    serif: ['"Noto Serif SC"', 'serif'],
+                },
+                backgroundImage: {
+                    'landscape': "url('https://picsum.photos/id/1015/1920/1080')",
+                    'texture': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmNWYzZWUiPjwvcmVjdD4KPC9zdmc+')",
+                },
+                animation: {
+                    'float': 'float 6s ease-in-out infinite',
+                    'fade-in': 'fadeIn 0.5s ease-in-out',
+                    'slide-up': 'slideUp 0.5s ease-out',
+                    'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                },
+                keyframes: {
+                    float: {
+                        '0%, 100%': { transform: 'translateY(0)' },
+                        '50%': { transform: 'translateY(-10px)' },
+                    },
+                    fadeIn: {
+                        '0%': { opacity: '0' },
+                        '100%': { opacity: '1' },
+                    },
+                    slideUp: {
+                        '0%': { transform: 'translateY(20px)', opacity: '0' },
+                        '100%': { transform: 'translateY(0)', opacity: '1' },
+                    }
+                }
+            }
+        }
+    }
+    </script>
+    <style type="text/tailwindcss">        @layer utilities {
+        .content-auto {
+            content-visibility: auto;
+        }
+        .glass {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(209, 213, 219, 0.3);
+        }
+        .lantern {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            background-color: #E02020;
+            border-radius: 50% / 30%;
+            box-shadow: 0 0 20px rgba(224, 32, 32, 0.5);
+            animation: swing 3s ease-in-out infinite;
+            transform-origin: top center;
+        }
+        .lantern:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: #F7BA1E;
+            border-radius: 50%;
+        }
+        .lantern:after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 20px;
+            background-color: #F7BA1E;
+        }
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        .pattern-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231A56DB' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .password-strength {
+            @apply h-1 rounded-full transition-all duration-300;
+        }
+    }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-landscape bg-cover bg-center pattern-bg">
+<!-- 装饰元素：灯笼 -->
+<div class="lantern left-10 top-20 hidden md:block"></div>
+<div class="lantern right-10 top-20 hidden md:block" style="animation-delay: 0.5s;"></div>
+
+<div class="container max-w-6xl mx-auto">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+        <!-- 左侧介绍 -->
+        <div class="lg:w-1/2 space-y-8 text-center lg:text-left animate-fade-in">
+            <div class="inline-block lg:block mb-6">
+                <div class="w-20 h-20 bg-primary rounded-xl flex items-center justify-center shadow-xl animate-float">
+                    <i class="fa fa-user-plus text-white text-4xl"></i>
+                </div>
+            </div>
+
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-primary leading-tight">
+                加入 <span class="text-accent">家乡特色</span> 大家庭
+            </h1>
+
+            <p class="text-primary text-lg max-w-xl mx-auto lg:mx-0 bg-neutral/20 backdrop-blur-sm p-4 rounded-lg">
+                注册家乡特色系统，探索家乡独特的历史、美食、风景和人文，与全球游子共同连接家乡情感，分享家乡故事，传承家乡文化。
+            </p>
+
+            <div class="grid grid-cols-2 gap-4 mt-8">
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-5 shadow-lg transform hover:scale-105 transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fa fa-map-marker text-accent text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-primary">探索景点</h3>
+                    <p class="text-primary/80 text-sm mt-1">发现家乡独特自然风光与人文景观</p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-5 shadow-lg transform hover:scale-105 transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fa fa-cutlery text-accent text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-primary">品尝美食</h3>
+                    <p class="text-primary/80 text-sm mt-1">了解家乡传统美食与独特风味</p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-5 shadow-lg transform hover:scale-105 transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fa fa-book text-accent text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-primary">传承文化</h3>
+                    <p class="text-primary/80 text-sm mt-1">探索家乡传统文化与非遗技艺</p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-5 shadow-lg transform hover:scale-105 transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-3">
+                        <i class="fa fa-users text-accent text-xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-primary">连接乡亲</h3>
+                    <p class="text-primary/80 text-sm mt-1">与家乡人分享生活点滴与回忆</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧注册表单 -->
+        <div class="lg:w-2/5 w-full animate-slide-up">
+            <div class="glass rounded-2xl shadow-2xl overflow-hidden w-full max-w-md mx-auto">
+                <div class="p-8 space-y-6">
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl font-bold text-neutral">创建新账号</h2>
+                        <p class="text-muted mt-1">填写以下信息注册您的账号</p>
+                    </div>
+
+                    <form id="registerForm" class="space-y-5" th:action="@{/user/register}" method="post" th:object="${user}">
+                        <div class="space-y-2">
+                            <label for="username" class="block text-sm font-medium text-neutral">用户名</label>
+                            <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                <input type="text" id="username" name="username" class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 input-focus" placeholder="请输入用户名"  th:field="*{username}" required>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="phone" class="block text-sm font-medium text-neutral">手机号码</label>
+                            <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+                                        <i class="fa fa-phone"></i>
+                                    </span>
+                                <input type="tel" id="phone" name="phone" class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 input-focus" placeholder="请输入手机号码" th:field="*{phone}" required>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="password" class="block text-sm font-medium text-neutral">密码</label>
+                            <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                <input type="password" id="password" name="password" class="w-full pl-10 pr-10 py-3 rounded-lg border border-gray-200 input-focus" placeholder="请输入密码" th:field="*{password}" required>
+                                <button type="button" class="togglePassword absolute inset-y-0 right-0 flex items-center pr-3 text-muted hover:text-primary transition-colors">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                            </div>
+
+                            <!-- 密码强度指示器 -->
+                            <div class="hidden" id="passwordStrength">
+                                <div class="flex space-x-1">
+                                    <div class="password-strength bg-gray-200 w-full" id="strength1"></div>
+                                    <div class="password-strength bg-gray-200 w-full" id="strength2"></div>
+                                    <div class="password-strength bg-gray-200 w-full" id="strength3"></div>
+                                    <div class="password-strength bg-gray-200 w-full" id="strength4"></div>
+                                </div>
+                                <p class="text-xs text-muted mt-1" id="strengthText">密码强度: 弱</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="confirmPassword" class="block text-sm font-medium text-neutral">确认密码</label>
+                            <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="w-full pl-10 pr-10 py-3 rounded-lg border border-gray-200 input-focus" placeholder="请再次输入密码" th:field="*{rePassword}" required>
+                                <button type="button" class="togglePassword absolute inset-y-0 right-0 flex items-center pr-3 text-muted hover:text-primary transition-colors">
+                                    <i class="fa fa-eye-slash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <input id="agreement" name="agreement" type="checkbox" class="h-4 w-4 mt-1 rounded border-gray-300 text-primary focus:ring-primary/50" required>
+                            <label for="agreement" class="ml-2 block text-sm text-muted">
+                                我已阅读并同意 <a href="#" class="text-primary hover:underline">用户协议</a> 和 <a href="#" class="text-primary hover:underline">隐私政策</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg shadow-md btn-hover flex items-center justify-center space-x-2" th:href="@{/user/login}">
+                            <i class="fa fa-user-plus"></i>
+                            <span> 注册账号</span>
+                        </button>
+                    </form>
+                    <span th:text="${error}"></span>
+
+                    <div class="text-center text-sm text-muted">
+                        <p>已有账号? <a th:href="@{/user/login}" class="text-primary hover:underline font-medium">立即登录</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 页脚 -->
+<div class="absolute bottom-4 left-0 right-0 text-center text-white/60 text-xs">
+    <p>© 2023 家乡特色系统. 保留所有权利.</p>
+</div>
+
+<script>    // 密码显示/隐藏切换
+document.querySelectorAll('.togglePassword').forEach(button => {
+    button.addEventListener('click', function() {
+        const passwordInput = this.parentElement.querySelector('input');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // 切换图标
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+});
+
+// 密码强度检测
+const passwordInput = document.getElementById('password');
+const passwordStrength = document.getElementById('passwordStrength');
+
+passwordInput.addEventListener('input', function() {
+    const password = this.value;
+    let strength = 0;
+
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+    updateStrengthIndicator(strength);
+});
+
+function updateStrengthIndicator(strength) {
+    const strengthBars = [
+        document.getElementById('strength1'),
+        document.getElementById('strength2'),
+        document.getElementById('strength3'),
+        document.getElementById('strength4')
+    ];
+    const strengthText = document.getElementById('strengthText');
+
+    passwordStrength.classList.remove('hidden');
+
+    strengthBars.forEach(bar => {
+        bar.className = 'password-strength bg-gray-200 w-full';
+    });
+
+    let color, text;
+    switch(strength) {
+        case 0:
+        case 1:
+            color = 'bg-danger';
+            text = '弱';
+            strengthBars[0].className = `password-strength ${color} w-full`;
+            break;
+        case 2:
+            color = 'bg-warning';
+            text = '中';
+            strengthBars[0].className = `password-strength ${color} w-full`;
+            strengthBars[1].className = `password-strength ${color} w-full`;
+            break;
+        case 3:
+            color = 'bg-yellow-400';
+            text = '良好';
+            strengthBars.forEach((bar, i) => {
+                bar.className = `password-strength ${color} w-full`;
+            });
+            break;
+        case 4:
+        case 5:
+            color = 'bg-success';
+            text = '强';
+            strengthBars.forEach(bar => {
+                bar.className = `password-strength ${color} w-full`;
+            });
+            break;
+    }
+
+    strengthText.textContent = `密码强度: ${text}`;
+}
+
+// 表单提交处理
+// const registerForm = document.getElementById('registerForm');
+// registerForm.addEventListener('submit', function(e) {
+//     e.preventDefault();
+//
+//     const password = document.getElementById('password').value;
+//     const confirmPassword = document.getElementById('confirmPassword').value;
+//
+//     if (password !== confirmPassword) {
+//         alert('两次输入的密码不一致，请重新输入');
+//         return;
+//     }
+//
+//     const submitBtn = this.querySelector('button[type="submit"]');
+//     const originalText = submitBtn.innerHTML;
+//
+//     submitBtn.disabled = true;
+//     submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 注册中...';
+//
+//     setTimeout(() => {
+//         alert('注册成功！请查收验证邮件');
+//         submitBtn.innerHTML = originalText;
+//         submitBtn.disabled = false;
+//     }, 1500);
+// });
+</script>
+</body>
+</html>

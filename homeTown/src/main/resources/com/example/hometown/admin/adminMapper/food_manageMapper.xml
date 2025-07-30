@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hometown.admin.adminMapper.food_manageMapper">
+
+
+    <!-- 分页查询美食-->
+
+    <select id="page" resultType="com.example.hometown.admin.adminEntity.food">
+        SELECT cuisine.*, resource.file_path AS image
+        FROM cuisine
+        LEFT JOIN resource ON resource.id = cuisine.main_image_id
+        <where>
+            <if test="name != null and name != ''">
+                name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="ingredients != null and ingredients != ''">
+                ingredients LIKE CONCAT('%', #{ingredients}, '%')
+            </if>
+            <if test="originLocation != null and originLocation != ''">
+                origin_location LIKE CONCAT('%', #{originLocation}, '%')
+            </if>
+        </where>
+    </select>
+<!--    根据id查询美食-->
+    <select id="getById" resultType="com.example.hometown.admin.adminEntity.food">
+    select cuisine.*, resource.file_path as image from cuisine left join resource on resource.id = cuisine.main_image_id
+    where cuisine.id = #{id}
+
+    </select>
+<!--    更新美食-->
+    <update id="update">
+        update cuisine,resource
+        <set>
+
+            <if test="ingredients != null and ingredients != ''">
+                ingredients = #{ingredients},
+            </if>
+            <if test="originLocation != null and originLocation != ''">
+                origin_location = #{originLocation},
+            </if>
+            <if test="updateTime !=null">
+                    update_time = #{updateTime},
+            </if>
+        </set>
+        where cuisine.id = #{id}
+    </update>
+    <insert id="add">
+        insert into cuisine(name,description,ingredients,origin_location,recommended_restaurant,create_by,create_time,update_time)
+        values(#{name},#{description},#{ingredients},#{originLocation},#{recommendedRestaurant},#{createBy},#{createTime},#{updateTime})
+    </insert>
+</mapper>

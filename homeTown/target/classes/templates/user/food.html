@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>家乡美食展示</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+
+        .attraction-card, .food-card {
+            transition: transform 0.3s ease;
+        }
+
+        .attraction-card:hover, .food-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 50px 0;
+        }
+        .search-form input.form-control {
+            border-radius: 30px;
+            padding-left: 40px; /* 避免文字贴住图标 */
+            height: 40px;
+        }
+
+        .search-form .btn-outline-light {
+            border-radius: 30px;
+            height: 40px;
+            white-space: nowrap; /* 禁止按钮文字换行 */
+        }
+
+        .search-form i.fa-search {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">我的家乡</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!--                搜索栏-->
+                <li class="nav-item me-3">
+                    <form class="d-flex mx-auto search-form" role="search" th:action="@{/user/food/search}" method="post" style="max-width: 350px;">
+                        <i class="fa fa-search fa-search"></i>
+                        <input class="form-control me-2" type="search" placeholder="搜索" aria-label="Search" name="name">
+                        <button class="btn btn-outline-light" type="submit">搜索</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="/user/user">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/scenic">景点</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/user/food">美食</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/culture">文化</a>
+                </li>
+                <!-- 显示用户名 -->
+
+                <span class="navbar-text text-white me-3" th:if="${username != null}">
+                        欢迎你, <span th:text="${username}">用户名</span>
+                    </span>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+<!-- 主要内容 -->
+<main class="container py-5 mt-5" style="padding-top: 70px;">
+
+    <!-- 特色美食 -->
+    <section class="mb-5">
+        <h2 class="text-center mb-4">特色美食</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4" th:each="food : ${food}">
+                <div class="card food-card">
+                    <img th:src="'/images/food/' + ${food.name}+'.jpg'" class="card-img-top" alt="美食图片" style="width: 100%; height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${food.name}">美食名称</h5>
+<!--                        食材-->
+                        <p class="text-muted"><i class="fa fa-cutlery"></i> <span th:text="${food.ingredients}">食材</span></p>
+                        <p class="card-text" th:text="${#strings.abbreviate(food.description, 100)}">美食描述...</p>
+                        <p class="text-muted"><i class="fa fa-cutlery"></i> <span th:text="${food.recommendedRestaurant}">推荐餐厅</span></p>
+                        <p class="text-muted"><i class="fa fa-clock-o"></i> <span th:text="${food.updateTime}">更新时间</span></p>
+                        <!-- 收藏按钮 -->
+                        <!-- 收藏按钮 -->
+                        <form th:action="@{/user/foodCollect}" method="post">
+                            <input type="hidden" name="userId" th:value="${session.loginUser.id}"></input>
+                            <input type="hidden" name="cuisineId" th:value="${food.id}">
+                            <input type="hidden" name="name" th:value="${food.name}"></input>
+                            <!--                            文化收藏的创建时间-->
+                            <input type="hidden" name="createTime"
+                                   th:value="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd').format(#temporals.createNow())}" />
+                            <!--                            文化收藏的更新时间-->
+                            <input type="hidden" name="updateTime"
+                                   th:value="${T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd HH:mm:ss').format(#temporals.createNow())}" />
+
+                            <button type="submit" class="btn btn-outline-danger w-100">
+                                <i class="fa fa-heart" ></i> 收藏
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- 页脚 -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>关于我们</h3>
+                <p>这是一个展示我的家乡魅力的网站，希望能让更多人了解和爱上这座城市。</p>
+            </div>
+            <div class="col-md-4">
+                <h3>联系我们</h3>
+                <p><i class="fa fa-home"></i> 创作者:陈荫</p>
+                <p><i class="fa fa-map-marker"></i> 地址：中国四川省巴中市南江县</p>
+                <p><i class="fa fa-phone"></i> 电话：123-456-7890</p>
+                <p><i class="fa fa-envelope"></i> 邮箱：1745248713@qq.com</p>
+            </div>
+            <div class="col-md-4">
+                <h3>关注我们</h3>
+                <div class="social-media">
+                    <a href="#" class="btn btn-outline-light btn-circle me-2"><i class="fa fa-weixin"></i></a>
+                    <a href="#" class="btn btn-outline-light btn-circle me-2"><i class="fa fa-weibo"></i></a>
+                    <a href="#" class="btn btn-outline-light btn-circle me-2"><i class="fa fa-instagram"></i></a>
+                    <a href="#" class="btn btn-outline-light btn-circle"><i class="fa fa-youtube-play"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <p>&copy;  我的家乡网站. 保留所有权利.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
